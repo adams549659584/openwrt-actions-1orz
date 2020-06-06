@@ -1,16 +1,19 @@
 name: Build-Lean-lede
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - '.github/workflows/Build-Lean-lede.yml'
-  schedule:
-        - cron: 0 */6 * * *
+  # push:
+  #   branches:
+  #     - master
+  #   paths:
+  #     - '.github/workflows/Build-Lean-lede.yml'
+  # schedule:
+  #       - cron: 0 */6 * * *
+  watch:
+    types: started        
 
 jobs:
   x86:
     runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
     steps:    
     - name: Prepare environment.
       env:
@@ -25,7 +28,7 @@ jobs:
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
         sudo df -h
-        curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/.bashrc >> ~/.bashrc
+        curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/.bashrc >> ~/.bashrc
         sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
         
     - name: Clone source and install
@@ -38,8 +41,8 @@ jobs:
     - name: Download and Load custom configuration
       run: |
         cd lede
-        curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/x86_64/.config >.config
-        bash <(curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/diy.sh)
+        curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/x86_64/.config >.config
+        bash <(curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/diy.sh)
         ./scripts/feeds install -a
         make defconfig
         
@@ -107,6 +110,7 @@ jobs:
 
   Raspberry3:
     runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
     steps:
     - name: Initialization environment.
       env:
@@ -120,7 +124,7 @@ jobs:
         sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
-        curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/.bashrc >> ~/.bashrc
+        curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/.bashrc >> ~/.bashrc
         sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
         
     - name: Clone source and install
@@ -133,8 +137,8 @@ jobs:
     - name: Download and Load custom configuration
       run: |
         cd lede
-        curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/rpi/.config >.config
-        bash <(curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/diy.sh)
+        curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/rpi/.config >.config
+        bash <(curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/diy.sh)
         ./scripts/feeds install -a
         make defconfig
         
@@ -200,6 +204,7 @@ jobs:
 
   x86_pure:
     runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
     steps:    
     - name: Initialization environment.
       env:
@@ -213,7 +218,7 @@ jobs:
         sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
-        curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/.bashrc >> ~/.bashrc
+        curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/.bashrc >> ~/.bashrc
         sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
         
     - name: Clone source and install
@@ -226,8 +231,8 @@ jobs:
     - name: Download and Load custom configuration
       run: |
         cd lede
-        curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/x86_64/pure/.config >.config
-        bash <(curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/diy.sh)
+        curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/x86_64/pure/.config >.config
+        bash <(curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/diy.sh)
         ./scripts/feeds install -a
         make defconfig
         
@@ -285,6 +290,7 @@ jobs:
 
   RaspberryPi4:
     runs-on: ubuntu-latest
+    if: github.event.repository.owner.id == github.event.sender.id
     steps:
     - name: Initialization environment.
       env:
@@ -298,7 +304,7 @@ jobs:
         sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs gcc-multilib g++-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler antlr3 gperf
         sudo -E apt-get -qq autoremove --purge
         sudo -E apt-get -qq clean
-        curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/.bashrc >> ~/.bashrc
+        curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/.bashrc >> ~/.bashrc
         sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
         
     - name: Clone source and install
@@ -311,8 +317,8 @@ jobs:
     - name: Download and Load custom configuration
       run: |
         cd lede
-        curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/rpi4/.config >.config
-        bash <(curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/diy.sh)
+        curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/rpi4/.config >.config
+        bash <(curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/diy.sh)
         ./scripts/feeds install -a
         make defconfig
         

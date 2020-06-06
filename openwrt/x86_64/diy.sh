@@ -19,11 +19,11 @@ git clone https://github.com/jerrykuku/luci-theme-argon
 cd ../../
 
 # Modify default IP
-sed -i 's/192.168.1.1/10.0.0.1/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.124.111/g' package/base-files/files/bin/config_generate
 sed -i 's/192.168/10.0/g' package/base-files/files/bin/config_generate
 
 # Modify default Theme
 # sed -i 's/bootstrap/argon/g' feeds/luci/modules/luci-base/root/etc/config/luci
 
 # Add some default settings
-curl -fsSL https://raw.githubusercontent.com/1orz/My-action/master/lean-lede/x86_64/zzz-default-settings > package/lean/default-settings/files/zzz-default-settings
+curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/x86_64/zzz-default-settings > package/lean/default-settings/files/zzz-default-settings
