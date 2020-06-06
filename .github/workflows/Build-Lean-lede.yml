@@ -88,7 +88,7 @@ jobs:
       uses: actions/upload-artifact@master
       if: always()
       with:
-        name: x86_64-Package.zip
+        name: x86_64-Packages
         path: lede/bin/x86_64-Package.zip
         
     - name: Setup Upload dictionary
