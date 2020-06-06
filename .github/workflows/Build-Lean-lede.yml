@@ -58,9 +58,9 @@ jobs:
       run: |
         cd lede
         sudo df -h
-        echo -e "$(nproc) thread compile"
+        echo -e "$(($(nproc) + 1)) thread compile"
         
-        make -j$(nproc)
+        make -j$(($(nproc) + 1))
         sudo df -h
         
     - name: Single-core compile
@@ -78,13 +78,18 @@ jobs:
         name: LEDE-x86_64-bin-dictionary
         path: lede/bin
         
-    - name: Only Upload Packages to Main Download Station
-      if: success()
+    - name: Setup Upload Packages
+      if: always()
       run: |
         cd lede/bin
         zip -r x86_64-Package.zip . -i *.ipk
-        curl -F "token=${{ secrets.UPLOAD_TOKEN }}" -F "location=Router/LEDE/x86_64/Lean-Package" -F "file=@x86_64-Package.zip" ${{ secrets.MAIN_UPLOAD_PROCESSOR }}
-        curl --socks5 ${{ secrets.PROXY_ADDR }} -U ${{ secrets.PROXY_USER }} -F "token=${{ secrets.UPLOAD_TOKEN }}" -F "location=Router/LEDE/x86_64/Lean-Package" -F "file=@x86_64-Package.zip" ${{ secrets.CN_STATION_PROCESSOR }}
+    
+    - name: Only Upload Packages
+      uses: actions/upload-artifact@master
+      if: always()
+      with:
+        name: x86_64-Package.zip
+        path: lede/bin/x86_64-Package.zip
         
     - name: Setup Upload dictionary
       if: always()
@@ -100,13 +105,6 @@ jobs:
         name: x86_64
         path: ${{ env.FIRMWARE }}
         
-    # - name: Upload firmware to Main Download Station (Without packages)
-    #   if: success()
-    #   run: |
-    #     cd lede/bin/targets/*/*
-    #     zip -r -o x86_64.zip ./
-    #     curl -F "token=${{ secrets.UPLOAD_TOKEN }}" -F "location=Router/LEDE/x86_64/Lean" -F "file=@x86_64.zip" ${{ secrets.MAIN_UPLOAD_PROCESSOR }}
-    #     curl --socks5 ${{ secrets.PROXY_ADDR }} -U ${{ secrets.PROXY_USER }} -F "token=${{ secrets.UPLOAD_TOKEN }}" -F "location=Router/LEDE/x86_64/Lean" -F "file=@x86_64.zip" ${{ secrets.CN_STATION_PROCESSOR }}
 
   x86_pure:
     runs-on: ubuntu-latest
@@ -152,9 +150,9 @@ jobs:
     - name: Multi-core compile
       run: |
         cd lede
-        echo -e "$(nproc) thread compile"
+        echo -e "$(($(nproc) + 1)) thread compile"
         sudo df -h
-        make -j$(nproc)
+        make -j$(($(nproc) + 1))
         sudo df -h
         
     - name: Single-core compile
@@ -185,14 +183,6 @@ jobs:
       with:
         name: x86_64_pure
         path: ${{ env.FIRMWARE }}       
-        
-    # - name: Upload firmware to Main Download Station (Without packages)
-    #   if: success()
-    #   run: |
-    #     cd lede/bin/targets/*/*
-    #     zip -r -o x86_64-pure.zip ./
-    #     curl -F "token=${{ secrets.UPLOAD_TOKEN }}" -F "location=Router/LEDE/x86_64/Lean-pure" -F "file=@x86_64-pure.zip" ${{ secrets.MAIN_UPLOAD_PROCESSOR }}
-    #     curl --socks5 ${{ secrets.PROXY_ADDR }} -U ${{ secrets.PROXY_USER }} -F "token=${{ secrets.UPLOAD_TOKEN }}" -F "location=Router/LEDE/x86_64/Lean-pure" -F "file=@x86_64-pure.zip" ${{ secrets.CN_STATION_PROCESSOR }}
 
 
         
