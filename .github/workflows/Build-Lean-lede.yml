@@ -104,6 +104,13 @@ jobs:
       with:
         name: x86_64
         path: ${{ env.FIRMWARE }}
+
+    - name: Only Upload openwrt-x86-64-uefi-gpt-squashfs.img
+      uses: actions/upload-artifact@master
+      if: success()
+      with:
+        name: openwrt-x86-64-uefi-gpt-squashfs.img
+        path: lede/bin/targets/openwrt-x86-64-uefi-gpt-squashfs.img.gz
         
 
   x86_pure:
@@ -184,7 +191,12 @@ jobs:
         name: x86_64_pure
         path: ${{ env.FIRMWARE }}       
 
-
+    - name: Only Upload openwrt-x86-64-pure-uefi-gpt-squashfs.img
+      uses: actions/upload-artifact@master
+      if: success()
+      with:
+        name: openwrt-x86-64-pure-uefi-gpt-squashfs.img
+        path: lede/bin/targets/openwrt-x86-64-uefi-gpt-squashfs.img.gz
         
   x86_original:
     runs-on: ubuntu-latest
@@ -211,14 +223,6 @@ jobs:
         cd lede
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-        
-    - name: Download and Load custom configuration
-      run: |
-        cd lede
-        curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/x86_64/pure/.config >.config
-        bash <(curl -fsSL https://raw.githubusercontent.com/adams549659584/openwrt-actions-1orz/master/lean-lede/diy.sh)
-        ./scripts/feeds install -a
-        make defconfig
         
     - name: Download package
       run: |
